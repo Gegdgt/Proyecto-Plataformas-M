@@ -45,5 +45,4 @@ fun TopBar() {
 @Composable
 fun TopBarPreview() {
     TopBar()
-    
 }

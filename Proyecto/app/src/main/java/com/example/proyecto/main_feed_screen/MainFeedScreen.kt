@@ -19,7 +19,7 @@ fun MainFeedScreen() {
         bottomBar = {
 
         },
-        //backgroundColor = Color.White,
+        containerColor = Color.White,
 
     ) {innerPadding ->
         LazyColumn(

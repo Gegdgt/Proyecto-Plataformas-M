@@ -18,15 +18,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             ProyectoTheme {
-                //No esta llamando a la funcion bien y no se porque
                 MainFeedScreen()
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun MainActivityPreview() {
-    MainActivity()
 }
