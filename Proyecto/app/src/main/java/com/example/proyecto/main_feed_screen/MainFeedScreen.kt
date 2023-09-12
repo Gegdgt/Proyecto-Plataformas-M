@@ -17,7 +17,7 @@ fun MainFeedScreen() {
             TopBar()
         },
         bottomBar = {
-
+            BottomBar()
         },
         containerColor = Color.White,
 
