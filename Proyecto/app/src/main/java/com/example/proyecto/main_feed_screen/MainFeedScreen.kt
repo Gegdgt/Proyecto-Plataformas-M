@@ -2,25 +2,35 @@ package com.example.proyecto.main_feed_screen
 
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.proyecto.model.User
-import com.example.proyecto.R
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.proyecto.R
+import com.example.proyecto.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainFeedScreen() {
-
     val users = listOf(
         User(
             profilePic = painterResource(R.drawable.profile_pic),
@@ -108,6 +118,80 @@ fun MainFeedScreen() {
             }
         }
     }
+}
+
+@Composable
+fun BottomBar(){
+    BottomAppBar{
+        NavigationBarItem(
+            selected = true,
+            onClick = {/*TODO*/},
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_home_24),
+                    contentDescription = "Home Screen",
+                    tint = Color.Black,
+                    modifier = Modifier.size(35.dp)
+                )
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {/*TODO*/},
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_search_24),
+                    contentDescription = "Search Screen",
+                    tint = Color.Black,
+                    modifier = Modifier.size(35.dp)
+                )
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {/*TODO*/},
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_person_24),
+                    contentDescription = "Profile",
+                    tint = Color.Black,
+                    modifier = Modifier.size(35.dp)
+                )
+            }
+        )
+    }
+}
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun TopBar() {
+    TopAppBar(
+        title = {
+            Text(
+                modifier = Modifier.offset(y = 5.dp),
+                text = "Break",
+                fontSize = 35.sp,
+                color = Color.Black
+            )
+        },
+        actions = {
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.baseline_add_24) ,
+                    contentDescription = "Add Post",
+                    tint = Color.Black,
+                    modifier = Modifier.size(25.dp)
+                )
+            }
+            IconButton(onClick = { /*TODO*/ }) {
+                Icon(
+                    painter = painterResource(id = R.drawable.profile_pic) ,
+                    contentDescription = "Profile Button",
+                    tint = Color.Black,
+                    modifier = Modifier.size(20.dp).clip(CircleShape)
+                )
+            }
+        }
+    )
 }
 
 @Preview
