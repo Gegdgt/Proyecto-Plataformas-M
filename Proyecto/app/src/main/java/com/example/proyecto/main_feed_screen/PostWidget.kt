@@ -27,12 +27,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.proyecto.R
 import com.example.proyecto.model.User
+import com.example.proyecto.navigation.AppScreens
 
 @Composable
 fun PostWidget(
-    user: User
+    user: User,
+    navController: NavController
 ){
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -42,7 +46,7 @@ fun PostWidget(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(10.dp)
-                .clickable { /*TODO*/ },
+                .clickable {  navController.navigate(AppScreens.VisitProfile.route)},
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Row {
@@ -132,6 +136,7 @@ fun PostWidget(
 @Preview
 @Composable
 fun PostWidgetPreview() {
+    val navController = rememberNavController()
     PostWidget(
         User(
             profilePic = painterResource(R.drawable.profile_pic),
@@ -141,6 +146,7 @@ fun PostWidgetPreview() {
             likeCount = 4585,
             caption = "Nuevo evento!!",
             commentCount = 1987
-        )
+        ),
+        navController = navController
     )
 }

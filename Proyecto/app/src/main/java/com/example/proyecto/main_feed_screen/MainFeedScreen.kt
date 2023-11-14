@@ -115,7 +115,7 @@ fun MainFeedScreen(navController: NavController) {
             item{Divider()}
             items(users) {
                 user ->
-                PostWidget(user = user)
+                PostWidget(user = user,navController)
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }
