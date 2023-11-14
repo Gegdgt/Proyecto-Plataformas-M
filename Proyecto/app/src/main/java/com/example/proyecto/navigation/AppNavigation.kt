@@ -7,7 +7,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyecto.Authentication.HomeScreen
 import com.example.proyecto.Authentication.SignInScreen
 import com.example.proyecto.Authentication.SignUpScreen
+import com.example.proyecto.Visit_Profile.VisitProfile
 import com.example.proyecto.main_feed_screen.MainFeedScreen
+import com.example.proyecto.profile_perfil.ProfileScreen
 
 @Composable
 fun AppNavigation(){
@@ -24,6 +26,12 @@ fun AppNavigation(){
         }
         composable(route = AppScreens.MainFeedScreen.route){
             MainFeedScreen(navController)
+        }
+        composable(route = AppScreens.ProfileScreen.route){
+            ProfileScreen(navController = navController)
+        }
+        composable(route = AppScreens.VisitProfile.route){
+            VisitProfile(navController)
         }
     }
 

@@ -35,12 +35,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.proyecto.R
+import com.example.proyecto.navigation.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
+fun ProfileScreen(navController: NavController) {
     val user = User(
         username = "Porfil_Prueba123",
         profileImagen = "https://via.placeholder.com/200",
@@ -80,7 +82,7 @@ fun ProfileScreen() {
             )
         },
         bottomBar = {
-            BottomBarPS()
+            BottomBarPS(navController)
         },
         ) {innerPadding ->
         val size = 3
@@ -132,11 +134,11 @@ fun ProfilePostImage(image:String, modifier: Modifier = Modifier){
 }
 
 @Composable
-fun BottomBarPS(){
+fun BottomBarPS(navController: NavController){
     BottomAppBar{
         NavigationBarItem(
             selected = false,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.MainFeedScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_home_24),
@@ -160,7 +162,7 @@ fun BottomBarPS(){
         )
         NavigationBarItem(
             selected = true,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.ProfileScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_person_24),
@@ -268,5 +270,5 @@ private fun ProfileButton(onClick: () -> Unit, text: String, modifier: Modifier 
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    //ProfileScreen()
 }

@@ -32,11 +32,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun VisitProfile() {
+fun VisitProfile(navController: NavController) {
     val VisitUser = VisitUser(
         vUsername = "Perfil_Visita123",
         vProfileImagen = "https://via.placeholder.com/200",
@@ -122,6 +125,7 @@ fun VisitProfile() {
 fun ProfilePostImage(image:String, modifier: Modifier = Modifier){
     Box(modifier = modifier){
         AsyncImage(model = image, contentDescription = "Post Perfil")
+
     }
 }
 @Composable
@@ -222,5 +226,5 @@ private fun ProfileButton(onClick: () -> Unit, text: String, modifier: Modifier 
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    VisitProfile()
+    VisitProfile(rememberNavController())
 }

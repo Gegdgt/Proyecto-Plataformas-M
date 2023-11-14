@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.proyecto.R
 import com.example.proyecto.model.User
+import com.example.proyecto.navigation.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -99,10 +101,10 @@ fun MainFeedScreen(navController: NavController) {
 
     Scaffold (
         topBar = {
-            TopBar()
+            TopBar(navController)
         },
         bottomBar = {
-            BottomBar()
+            BottomBar(navController)
         },
         containerColor = Color.White,
 
@@ -121,11 +123,11 @@ fun MainFeedScreen(navController: NavController) {
 }
 
 @Composable
-fun BottomBar(){
+fun BottomBar(navController: NavController){
     BottomAppBar{
         NavigationBarItem(
             selected = true,
-            onClick = {/*TODO*/},
+            onClick = { navController.navigate(route = AppScreens.MainFeedScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_home_24),
@@ -149,7 +151,7 @@ fun BottomBar(){
         )
         NavigationBarItem(
             selected = false,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.ProfileScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_person_24),
@@ -163,7 +165,7 @@ fun BottomBar(){
 }
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TopBar() {
+fun TopBar(navController: NavController) {
     TopAppBar(
         title = {
             Text(
@@ -182,7 +184,7 @@ fun TopBar() {
                     modifier = Modifier.size(25.dp)
                 )
             }
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate(route = AppScreens.VisitProfile.route) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.profile_pic) ,
                     contentDescription = "Profile Button",
