@@ -1,4 +1,4 @@
-package com.example.proyecto.profile_perfil
+package com.example.proyecto.Visit_Profile
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -16,14 +15,13 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -31,25 +29,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.example.proyecto.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ProfileScreen() {
-    val user = User(
-        username = "Porfil_Prueba123",
-        profileImagen = "https://via.placeholder.com/200",
-        postCount = 15,
-        followers = 388,
-        following = 360,
-        name = "Nombre Generico",
-        description = "Este es mi descripcion",
-        posts = listOf(
+fun VisitProfile() {
+    val VisitUser = VisitUser(
+        vUsername = "Perfil_Visita123",
+        vProfileImagen = "https://via.placeholder.com/200",
+        vPostCount = 15,
+        vFollowers = 388,
+        vFollowing = 360,
+        vName = "Nombre Generico",
+        vDescription = "Este es mi descripcion",
+        vPosts = listOf(
             // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
             // , Si son mas grandes mejor, porque los adapta Compose
             "https://via.placeholder.com/500",
@@ -75,14 +71,12 @@ fun ProfileScreen() {
     Scaffold (
         topBar = {
             TopBarPS(
+                backClick = {/*TODO*/ },
                 optionClick = {/*TODO*/ },
-                username = user.username
+                username = VisitUser.vUsername
             )
         },
-        bottomBar = {
-            BottomBarPS()
-        },
-        ) {innerPadding ->
+    ) {innerPadding ->
         val size = 3
         LazyVerticalGrid(
             modifier = Modifier.padding(innerPadding),
@@ -92,18 +86,18 @@ fun ProfileScreen() {
                 GridItemSpan(size)
             }) {
                 ProfileInformation(
-                    imagen = user.profileImagen,
-                    posts = user.postCount,
-                    followers = user.followers,
-                    following = user.following
+                    imagen = VisitUser.vProfileImagen,
+                    posts = VisitUser.vPostCount,
+                    followers = VisitUser.vFollowers,
+                    following = VisitUser.vFollowing
                 )
             }
             item(span = {
                 GridItemSpan(size)
             }) {
                 ProfileDescription(
-                    name = user.name,
-                    description = user.description,
+                    name = VisitUser.vName,
+                    description = VisitUser.vDescription,
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 4.dp, bottom = 4.dp)
                 )
             }
@@ -114,7 +108,7 @@ fun ProfileScreen() {
                     modifier = Modifier.padding(start = 16.dp, end = 16.dp)
                 )
             }
-            items(user.posts) {
+            items(VisitUser.vPosts) {
                 ProfilePostImage(
                     image = it,
                     modifier = Modifier.padding(1.dp)
@@ -130,52 +124,11 @@ fun ProfilePostImage(image:String, modifier: Modifier = Modifier){
         AsyncImage(model = image, contentDescription = "Post Perfil")
     }
 }
-
-@Composable
-fun BottomBarPS(){
-    BottomAppBar{
-        NavigationBarItem(
-            selected = false,
-            onClick = {/*TODO*/},
-            icon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_home_24),
-                    contentDescription = "Home Screen",
-                    tint = Color.Black,
-                    modifier = Modifier.size(35.dp)
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = false,
-            onClick = {/*TODO*/},
-            icon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_search_24),
-                    contentDescription = "Search Screen",
-                    tint = Color.Black,
-                    modifier = Modifier.size(35.dp)
-                )
-            }
-        )
-        NavigationBarItem(
-            selected = true,
-            onClick = {/*TODO*/},
-            icon = {
-                Icon(
-                    painter = painterResource(R.drawable.baseline_person_24),
-                    contentDescription = "Profile",
-                    tint = Color.Black,
-                    modifier = Modifier.size(35.dp)
-                )
-            }
-        )
-    }
-}
 @Composable
 fun TopBarPS(
     // Esto es lo que se debe poner en los onclicks
     // para moverse a otras pantallas
+    backClick: () -> Unit,
     optionClick: () -> Unit,
     username: String,
     modifier: Modifier = Modifier
@@ -185,14 +138,15 @@ fun TopBarPS(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
     ){
+        IconButton(onClick = { backClick }) {
+            Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Flecha de regreso")
+        }
         Spacer(modifier = Modifier.width(16.dp))
-
         Text(text = username)
         Box {
             Row{
                 IconButton(onClick = { optionClick }) {
                     Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Opciones")
-
                 }
             }
         }
@@ -268,5 +222,5 @@ private fun ProfileButton(onClick: () -> Unit, text: String, modifier: Modifier 
 @Preview
 @Composable
 fun ProfileScreenPreview() {
-    ProfileScreen()
+    VisitProfile()
 }
