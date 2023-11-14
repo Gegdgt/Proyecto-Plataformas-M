@@ -1,6 +1,7 @@
 package com.example.proyecto.main_feed_screen
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -37,9 +38,11 @@ fun PostWidget(
         modifier = Modifier.fillMaxWidth()
     ){
         Row(
+        
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(10.dp),
+                .padding(10.dp)
+                .clickable { /*TODO*/ },
             horizontalArrangement = Arrangement.SpaceBetween
         ){
             Row {
