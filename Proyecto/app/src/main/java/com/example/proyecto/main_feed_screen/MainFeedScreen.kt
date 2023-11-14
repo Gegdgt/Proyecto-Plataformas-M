@@ -22,15 +22,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.proyecto.R
 import com.example.proyecto.model.User
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainFeedScreen() {
+fun MainFeedScreen(navController: NavController) {
     val users = listOf(
         User(
             profilePic = painterResource(R.drawable.profile_pic),
@@ -194,8 +194,3 @@ fun TopBar() {
     )
 }
 
-@Preview
-@Composable
-fun MainFeedScreenPreview() {
-    MainFeedScreen()
-}
