@@ -139,7 +139,7 @@ fun BottomBar(navController: NavController){
         )
         NavigationBarItem(
             selected = false,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.SearchScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_search_24),

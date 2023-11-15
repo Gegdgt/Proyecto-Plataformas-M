@@ -1,5 +1,6 @@
 package com.example.proyecto.search
 
+
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -16,12 +17,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.proyecto.R
+import com.example.proyecto.navigation.AppScreens
 import com.example.proyecto.profile_perfil.ProfilePostImage
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SearchScreen() {
+fun SearchScreen(navController: NavController) {
     val extraPost = ExtraPost(
         users = listOf(
             "Usuario1",
@@ -66,7 +71,7 @@ fun SearchScreen() {
                 TopBarSS()
             },
             bottomBar = {
-                BottomBarSS()
+                BottomBarSS(navController)
             },
             containerColor = Color.White,
 
@@ -88,11 +93,11 @@ fun SearchScreen() {
 }
 
 @Composable
-fun BottomBarSS(){
+fun BottomBarSS(navController: NavController){
     BottomAppBar{
         NavigationBarItem(
             selected = false,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.MainFeedScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_home_24),
@@ -104,7 +109,7 @@ fun BottomBarSS(){
         )
         NavigationBarItem(
             selected = true,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.SearchScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_search_24),
@@ -116,7 +121,7 @@ fun BottomBarSS(){
         )
         NavigationBarItem(
             selected = false,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.ProfileScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_person_24),
@@ -136,5 +141,5 @@ fun TopBarSS() {
 @Preview
 @Composable
 fun SearchScreenPreview() {
-    SearchScreen()
+    SearchScreen(rememberNavController())
 }

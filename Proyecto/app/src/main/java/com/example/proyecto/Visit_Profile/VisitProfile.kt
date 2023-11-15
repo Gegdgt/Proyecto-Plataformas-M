@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells.Fixed
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -17,11 +18,13 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,12 +32,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.example.proyecto.R
+import com.example.proyecto.navigation.AppScreens
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -222,7 +228,47 @@ private fun ProfileButton(onClick: () -> Unit, text: String, modifier: Modifier 
         Text(text = text)
     }
 }
-
+@Composable
+fun BottomBar(navController: NavController){
+    BottomAppBar{
+        NavigationBarItem(
+            selected = true,
+            onClick = { navController.navigate(route = AppScreens.MainFeedScreen.route)},
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_home_24),
+                    contentDescription = "Home Screen",
+                    tint = Color.Black,
+                    modifier = Modifier.size(35.dp)
+                )
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {navController.navigate(route = AppScreens.SearchScreen.route)},
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_search_24),
+                    contentDescription = "Search Screen",
+                    tint = Color.Black,
+                    modifier = Modifier.size(35.dp)
+                )
+            }
+        )
+        NavigationBarItem(
+            selected = false,
+            onClick = {navController.navigate(route = AppScreens.ProfileScreen.route)},
+            icon = {
+                Icon(
+                    painter = painterResource(R.drawable.baseline_person_24),
+                    contentDescription = "Profile",
+                    tint = Color.Black,
+                    modifier = Modifier.size(35.dp)
+                )
+            }
+        )
+    }
+}
 @Preview
 @Composable
 fun ProfileScreenPreview() {

@@ -44,7 +44,7 @@ import com.example.proyecto.navigation.AppScreens
 @Composable
 fun ProfileScreen(navController: NavController) {
     val user = User(
-        username = "Porfil_Prueba123",
+        username = "Profile_Prueba123",
         profileImagen = "https://via.placeholder.com/200",
         postCount = 15,
         followers = 388,
@@ -150,7 +150,7 @@ fun BottomBarPS(navController: NavController){
         )
         NavigationBarItem(
             selected = false,
-            onClick = {/*TODO*/},
+            onClick = {navController.navigate(route = AppScreens.SearchScreen.route)},
             icon = {
                 Icon(
                     painter = painterResource(R.drawable.baseline_search_24),

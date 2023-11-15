@@ -10,6 +10,7 @@ import com.example.proyecto.Authentication.SignUpScreen
 import com.example.proyecto.Visit_Profile.VisitProfile
 import com.example.proyecto.main_feed_screen.MainFeedScreen
 import com.example.proyecto.profile_perfil.ProfileScreen
+import com.example.proyecto.search.SearchScreen
 
 @Composable
 fun AppNavigation(){
@@ -32,6 +33,9 @@ fun AppNavigation(){
         }
         composable(route = AppScreens.VisitProfile.route){
             VisitProfile(navController)
+        }
+        composable(route = AppScreens.SearchScreen.route){
+            SearchScreen(navController)
         }
     }
 
