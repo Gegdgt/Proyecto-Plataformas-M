@@ -4,7 +4,6 @@ package com.example.proyecto.search
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -16,44 +15,59 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto.profile_perfil.ProfilePostImage
 
-val extraPost = ExtraPost(
-    users = listOf(
-        "Usuario1",
-        "Usuario2",
-        "Usuario3",
-        "Usuario4",
-        "Usuario5",
-        "Usuario6",
-        "Usuario7",
-        "Usuario8",
-        "Usuario9",
-        "Usuario10",
-        "Usuario11",
-        "Usuario12"
-
+val extraPost = listOf(
+    ExtraPost(
+        users = "Mi usuario",
+        posts = listOf(
+            // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
+            // , Si son mas grandes mejor, porque los adapta Compose
+            "https://via.placeholder.com/360",
+            "https://via.placeholder.com/360",
+            "https://via.placeholder.com/360",
+            "https://via.placeholder.com/360",
+            "https://via.placeholder.com/360",
+            "https://via.placeholder.com/360"
+        )
     ),
-    posts = listOf(
-        // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
-        // , Si son mas grandes mejor, porque los adapta Compose
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500",
-        "https://via.placeholder.com/500"
-    )
+    ExtraPost(
+        users = "Usuario1",
+        posts = listOf(
+            // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
+            // , Si son mas grandes mejor, porque los adapta Compose
+            "https://via.placeholder.com/500",
+            "https://via.placeholder.com/500",
+            "https://via.placeholder.com/500",
+            "https://via.placeholder.com/500",
+            "https://via.placeholder.com/500",
+            "https://via.placeholder.com/500"
+        )
+    ),
+    ExtraPost(
+        users = "Usuario2",
+        posts = listOf(
+            // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
+            // , Si son mas grandes mejor, porque los adapta Compose
+            "https://via.placeholder.com/600",
+            "https://via.placeholder.com/600",
+            "https://via.placeholder.com/600",
+            "https://via.placeholder.com/600",
+            "https://via.placeholder.com/600",
+            "https://via.placeholder.com/600"
+        )
+    ),
+    ExtraPost(
+        users = "Usuario3",
+        posts = listOf(
+            // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
+            // , Si son mas grandes mejor, porque los adapta Compose
+            "https://via.placeholder.com/700",
+            "https://via.placeholder.com/700",
+            "https://via.placeholder.com/700",
+            "https://via.placeholder.com/700",
+            "https://via.placeholder.com/700",
+            "https://via.placeholder.com/700"
+        )
+    ),
 )
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -74,11 +88,16 @@ fun SearchScreen(navController: NavController) {
             modifier = Modifier.padding(innerPadding),
             columns = GridCells.Fixed(size)
         ) {
-            items(extraPost.posts) {
-                ProfilePostImage(
-                    image = it,
-                    modifier = Modifier.padding(1.dp)
-                )
+            for (userPost in extraPost) {
+                // Iterar sobre las imágenes de cada usuario
+                for (postImage in userPost.posts) {
+                    item {
+                        ProfilePostImage(
+                            image = postImage,
+                            modifier = Modifier.padding(1.dp)
+                        )
+                    }
+                }
             }
         }
     }

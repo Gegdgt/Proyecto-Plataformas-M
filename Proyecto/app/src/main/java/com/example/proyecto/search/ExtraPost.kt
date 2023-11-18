@@ -1,7 +1,7 @@
 package com.example.proyecto.search
 
 data class ExtraPost(
-    val users: List<String>,
+    val users: String,
     val posts: List<String>
 ) { 
     fun doesMatchSearchQuery(query: String): Boolean{
