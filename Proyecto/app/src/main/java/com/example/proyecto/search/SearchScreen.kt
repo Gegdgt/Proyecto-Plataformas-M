@@ -30,7 +30,7 @@ val allUsers = listOf(
         )
     ),
     ExtraPost(
-        users = "Usuario1",
+        users = "Walter",
         posts = listOf(
             // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
             // , Si son mas grandes mejor, porque los adapta Compose
@@ -43,7 +43,7 @@ val allUsers = listOf(
         )
     ),
     ExtraPost(
-        users = "Usuario2",
+        users = "Ernesto",
         posts = listOf(
             // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
             // , Si son mas grandes mejor, porque los adapta Compose
@@ -56,7 +56,7 @@ val allUsers = listOf(
         )
     ),
     ExtraPost(
-        users = "Usuario3",
+        users = "Pedro",
         posts = listOf(
             // Hay que usar imagenes que sean mayores a 360px, ese es el minimo
             // , Si son mas grandes mejor, porque los adapta Compose
