@@ -41,7 +41,7 @@ fun MainFeedScreen(navController: NavController) {
             location = "Guatemala City",
             likeCount = 11909,
             caption = "Nuevo evento!!",
-            commentCount = 5698
+            commentCount = 5698,
         ),
         User(
             profilePic = painterResource(R.drawable.profile_pic),
