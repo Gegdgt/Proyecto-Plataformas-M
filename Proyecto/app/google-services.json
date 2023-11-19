@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "5034032521",
-    "project_id": "break-android-app",
-    "storage_bucket": "break-android-app.appspot.com"
+    "project_number": "314252759636",
+    "project_id": "break-ppm",
+    "storage_bucket": "break-ppm.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:5034032521:android:2b26b97014a31c2a693558",
+        "mobilesdk_app_id": "1:314252759636:android:638f281ba87ef317bb93c1",
         "android_client_info": {
           "package_name": "com.example.proyecto"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCjKGHF92IMtELNR2u8AFdtf95oGTCJEAg"
+          "current_key": "AIzaSyBarZRD9jShSw6umVbmD7FLC0Oy1UBV7ks"
         }
       ],
       "services": {

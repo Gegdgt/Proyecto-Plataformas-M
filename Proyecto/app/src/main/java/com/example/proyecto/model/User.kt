@@ -9,5 +9,5 @@ data class User(
     val location: String,
     val caption: String,
     val likeCount: Int,
-    val commentCount: Int,
+    val commentCount: Int
 )
