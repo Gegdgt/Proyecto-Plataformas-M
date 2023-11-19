@@ -4,9 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.proyecto.Authentication.HomeScreen
 import com.example.proyecto.Authentication.SignInScreen
-import com.example.proyecto.Authentication.SignUpScreen
 import com.example.proyecto.Visit_Profile.VisitProfile
 import com.example.proyecto.main_feed_screen.MainFeedScreen
 import com.example.proyecto.profile_perfil.ProfileScreen
@@ -15,15 +13,9 @@ import com.example.proyecto.search.SearchScreen
 @Composable
 fun AppNavigation(){
     val navController = rememberNavController()
-    NavHost(navController = navController , startDestination = AppScreens.HomeScreen.route ){
-        composable(route = AppScreens.HomeScreen.route){
-            HomeScreen(navController)
-        }
+    NavHost(navController = navController , startDestination = AppScreens.SignInScreen.route ){
         composable(route = AppScreens.SignInScreen.route){
             SignInScreen(navController)
-        }
-        composable(route = AppScreens.SignUpScreen.route){
-            SignUpScreen(navController)
         }
         composable(route = AppScreens.MainFeedScreen.route){
             MainFeedScreen(navController)
