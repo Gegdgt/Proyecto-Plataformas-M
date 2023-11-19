@@ -86,7 +86,7 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                     if (showLoginForm.value) "¿No tienes cuenta?"
                     else "¿Ya tienes cuenta?"
                 val text2 =
-                    if (showLoginForm.value) "¿Registrate"
+                    if (showLoginForm.value) "Registrate"
                     else "Inicia sesion"
                 Text(text = text1)
                 Text(text = text2,
@@ -225,7 +225,7 @@ fun InputField(
     valueState: MutableState<String>,
     labelId: String,
     isSingleLine: Boolean = true,
-    keyboardType: KeyboardType // Asegúrate de que KeyboardType esté definido como una enum
+    keyboardType: KeyboardType
 ) {
     OutlinedTextField(
         value = valueState.value,
