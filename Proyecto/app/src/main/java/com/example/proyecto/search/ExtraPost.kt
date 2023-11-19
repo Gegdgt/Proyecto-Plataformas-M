@@ -5,10 +5,11 @@ data class ExtraPost(
     val posts: List<String>
 ) { 
     fun doesMatchSearchQuery(query: String): Boolean{
-        val matchingUser = listOf(
-            "${users.toString()}"
+        val matchingCombination = listOf(
+            users,
+            "${users.first()}"
         )
-        return matchingUser.any{
+        return matchingCombination.any{
             it.contains(query, ignoreCase  = true)
         }
     }

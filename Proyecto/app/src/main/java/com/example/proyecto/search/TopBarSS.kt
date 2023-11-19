@@ -2,7 +2,6 @@ package com.example.proyecto.search
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -27,7 +26,7 @@ fun TopBarSS() {
     val isSearching by viewModel.isSearching.collectAsState()
     Column (
         modifier = Modifier
-            .fillMaxSize()
+            .fillMaxWidth()
             .padding(16.dp)
     ){
         TextField(
@@ -40,14 +39,14 @@ fun TopBarSS() {
                 )
             }
         )
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(1.dp))
         LazyColumn(modifier =  Modifier.fillMaxWidth()){
             items(users){ ExtraPost ->
                 Text(
                     text = "${ExtraPost.users}",
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(vertical = 16.dp)
+                        .padding(vertical = 1.dp)
                 )
 
             }

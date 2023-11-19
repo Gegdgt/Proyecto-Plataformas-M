@@ -15,7 +15,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto.profile_perfil.ProfilePostImage
 
-val extraPost = listOf(
+val allUsers = listOf(
     ExtraPost(
         users = "Mi usuario",
         posts = listOf(
@@ -88,7 +88,7 @@ fun SearchScreen(navController: NavController) {
             modifier = Modifier.padding(innerPadding),
             columns = GridCells.Fixed(size)
         ) {
-            for (userPost in extraPost) {
+            for (userPost in allUsers) {
                 // Iterar sobre las imágenes de cada usuario
                 for (postImage in userPost.posts) {
                     item {
