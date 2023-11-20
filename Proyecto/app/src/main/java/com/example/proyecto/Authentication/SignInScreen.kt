@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.proyecto.navigation.AppScreens
 import androidx.compose.material3.Text as Text
 @Composable
 fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
@@ -57,6 +58,9 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                 ){
                     email,password ->
                     Log.d("BREAK","Logueando con $email y $password")
+                    viewModel.signInWithEmailAndPassword(email, password){
+                        navController.navigate(AppScreens.MainFeedScreen.route)
+                    }
                 }
             }
             else{
