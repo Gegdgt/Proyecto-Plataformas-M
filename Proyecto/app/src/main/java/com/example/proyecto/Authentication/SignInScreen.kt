@@ -71,7 +71,9 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                 {
                         email, password ->
                         Log.d("BREAK","Creando cuenta con $email y $password")
-
+                        viewModel.createUserWithEmailAndPassword(email, password){
+                            navController.navigate(AppScreens.MainFeedScreen.route)
+                        }
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))

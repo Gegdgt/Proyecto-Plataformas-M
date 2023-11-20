@@ -32,4 +32,23 @@ class SignInScreenViewModel: ViewModel() {
         }
     }
 
+    fun createUserWithEmailAndPassword(email:String,
+                                       password: String,
+                                       MainFeedScreen: () -> Unit){
+        if(_loading.value == false){
+            _loading.value = true
+            auth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful){
+                        MainFeedScreen()
+                    }
+                    else {
+                        Log.d("BREAK", "createUserWithEmailAndPassword: ${task.result.toString()}")
+                    }
+                    _loading.value = false
+                }
+        }
+
+    }
+
 }
