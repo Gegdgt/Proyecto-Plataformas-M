@@ -1,7 +1,5 @@
 package com.example.proyecto.Authentication
 
-
-import android.graphics.drawable.Icon
 import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -38,10 +36,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.example.proyecto.navigation.AppScreens
 import androidx.compose.material3.Text as Text
-
-
 @Composable
 fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     //True = Login; False = Create
@@ -51,7 +46,8 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
     Surface(modifier = Modifier
         .fillMaxSize()
     ) {
-        Column (horizontalAlignment = Alignment.CenterHorizontally,
+        Column (
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
             if (showLoginForm.value) {
@@ -61,9 +57,6 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                 ){
                     email,password ->
                     Log.d("BREAK","Logueando con $email y $password")
-                    viewModel.signInWithEmailAndPassword(email,password){
-                        navController.navigate(AppScreens.MainFeedScreen.route)
-                    }
                 }
             }
             else{
@@ -74,9 +67,7 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                 {
                         email, password ->
                         Log.d("BREAK","Creando cuenta con $email y $password")
-                        viewModel.createUserWithEmailAndPassword(email,password){
-                            navController.navigate(AppScreens.MainFeedScreen.route)
-                        }
+
                 }
             }
             Spacer(modifier = Modifier.height(15.dp))
@@ -156,7 +147,6 @@ fun SumbitButton(
                 .padding(5.dp))
     }
 }
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordInput(
@@ -187,7 +177,6 @@ fun PasswordInput(
         }
     )
 }
-
 @Composable
 fun PasswordVisibleIcon(
     passwordVisible: MutableState<Boolean>
@@ -206,7 +195,6 @@ fun PasswordVisibleIcon(
     }
 
 }
-
 @Composable
 fun EmailInput(
     emailState: MutableState<String>,
