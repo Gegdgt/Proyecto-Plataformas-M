@@ -1,6 +1,7 @@
 package com.example.proyecto.Authentication
 
 import android.util.Log
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -31,6 +32,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
@@ -38,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.proyecto.navigation.AppScreens
 import androidx.compose.material3.Text as Text
+import com.example.proyecto.R
 @Composable
 fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
     //True = Login; False = Create
@@ -51,6 +54,11 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
         ){
+            Image(
+                painter = painterResource(id = R.drawable.break_1),
+                contentDescription = "Logo de la aplicación",
+                modifier = Modifier.fillMaxWidth().height(200.dp)
+            )
             if (showLoginForm.value) {
                 Text(text = "Iniciar Sesion")
                 UserForm(
