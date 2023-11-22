@@ -40,11 +40,10 @@ fun TopBar(navController: NavController) {
                     modifier = Modifier.size(25.dp)
                 )
             }
-            IconButton(onClick = { navController.navigate(route = AppScreens.VisitProfile.route) }) {
+            IconButton(onClick = { navController.navigate(route = AppScreens.SignInScreen.route) }) {
                 Icon(
-                    painter = painterResource(id = R.drawable.profile_pic) ,
-                    contentDescription = "Profile Button",
-                    tint = Color.Black,
+                    painter = painterResource(id = R.drawable.poder) ,
+                    contentDescription = "Desloguearse",
                     modifier = Modifier.size(20.dp).clip(CircleShape)
                 )
             }
