@@ -146,19 +146,19 @@ fun uploadPostScreen(navController: NavController){
                     uploadImageToFirebase(bitmap, context as ComponentActivity){success ->
                         isUploading.value = false
                         if(success){
-                            Toast.makeText(context, "Uploaded successfully", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Subida exitosa", Toast.LENGTH_SHORT).show()
                         }
                         else {
-                            Toast.makeText(context, "Failed to upload", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(context, "Error al subir", Toast.LENGTH_SHORT).show()
                         }
                     }
                 }
             },
                 colors = ButtonDefaults.buttonColors(
-                    Color.Blue
+                    Color.Gray
                 )
             ) {
-                Text(text = "Upload Image",
+                Text(text = "Subir imagen",
                     fontSize = 30.sp,
                     fontWeight = FontWeight.Bold
                     )
