@@ -177,7 +177,7 @@ fun uploadPostScreen(navController: NavController){
                         .width(300.dp)
                         .height(100.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(Color.Blue)) {
+                        .background(Color.Gray)) {
                     Column(modifier = Modifier.padding(start = 60.dp)){
                         Image(
                             painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
