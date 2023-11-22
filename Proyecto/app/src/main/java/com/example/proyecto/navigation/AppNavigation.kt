@@ -9,6 +9,7 @@ import com.example.proyecto.Visit_Profile.VisitProfile
 import com.example.proyecto.main_feed_screen.MainFeedScreen
 import com.example.proyecto.profile_perfil.ProfileScreen
 import com.example.proyecto.search.SearchScreen
+import com.example.proyecto.upload_post.uploadPostScreen
 
 @Composable
 fun AppNavigation(){
@@ -28,6 +29,9 @@ fun AppNavigation(){
         }
         composable(route = AppScreens.SearchScreen.route){
             SearchScreen(navController)
+        }
+        composable(route = AppScreens.UploadPostScreen.route){
+            uploadPostScreen(navController)
         }
     }
 

@@ -32,7 +32,7 @@ fun TopBar(navController: NavController) {
             )
         },
         actions = {
-            IconButton(onClick = { /*TODO*/ }) {
+            IconButton(onClick = { navController.navigate(route = AppScreens.UploadPostScreen.route) }) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_add_24) ,
                     contentDescription = "Add Post",
