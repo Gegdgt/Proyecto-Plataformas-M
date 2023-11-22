@@ -17,6 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.navigation.NavController
 import com.example.proyecto.R
 import com.example.proyecto.navigation.AppScreens
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.delay
 
 
@@ -35,8 +36,17 @@ fun BreakSplashScreen(navController: NavController){
                 }),
         )
         delay(3500L)
-        navController.navigate(AppScreens.SignInScreen.route)
-
+        //navController.navigate(AppScreens.SignInScreen.route)
+        if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
+            navController.navigate(AppScreens.SignInScreen.route)
+        }
+        else{
+            navController.navigate(AppScreens.MainFeedScreen.route){
+            popUpTo(AppScreens.SplashScreen.route){
+                inclusive=true
+            }
+            }
+        }
     }
     val imagePainter = painterResource(id = R.drawable.break_full)
 
