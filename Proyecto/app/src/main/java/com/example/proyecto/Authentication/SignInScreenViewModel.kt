@@ -13,6 +13,12 @@ import kotlinx.coroutines.launch
 class SignInScreenViewModel: ViewModel() {
     private val auth: FirebaseAuth = Firebase.auth
     private val _loading = MutableLiveData(false)
+    sealed class AuthResult {
+        object Success : AuthResult()
+        data class Error(val message: String) : AuthResult()
+    }
+
+    val authResult = MutableLiveData<AuthResult>()
 
     fun signInWithEmailAndPassword(email: String, password:String, MainFeedScreen:()-> Unit)
             = viewModelScope.launch {
@@ -20,18 +26,25 @@ class SignInScreenViewModel: ViewModel() {
             auth.signInWithEmailAndPassword(email,password)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful){
-                        Log.d("BREAK","signInWithEmailAndPassword logeado!!")
+                        //Log.d("BREAK","signInWithEmailAndPassword logeado!!")
+                        authResult.value = AuthResult.Success
                         MainFeedScreen()
                     }
                     else {
-                        Log.d("BREAK", "signInWithEmailAndPassword: ${task.result.toString()}")
+                        //Log.d("BREAK", "signInWithEmailAndPassword: ${task.result.toString()}")
+                        authResult.value = AuthResult.Error("Error al iniciar sesión. Verifica tus credenciales.")
                     }
                 }
         }
         catch (ex:Exception){
-            Log.d("BREAK", "signInWithEmailAndPassword: ${ex.message}")
+            //Log.d("BREAK", "signInWithEmailAndPassword: ${ex.message}")
+            authResult.value = AuthResult.Error("Error al iniciar sesión. Inténtalo de nuevo más tarde.")
         }
     }
+    fun clearError() {
+        authResult.value = null // Clear the error state
+    }
+
 
     fun createUserWithEmailAndPassword(email:String,
                                        password: String,
@@ -47,7 +60,8 @@ class SignInScreenViewModel: ViewModel() {
                         MainFeedScreen()
                     }
                     else {
-                        Log.d("BREAK", "createUserWithEmailAndPassword: ${task.result.toString()}")
+                        //Log.d("BREAK", "createUserWithEmailAndPassword: ${task.result.toString()}")
+                        authResult.value = AuthResult.Error("Error al crear cuenta. El correo electrónico ya está en uso.")
                     }
                     _loading.value = false
                 }

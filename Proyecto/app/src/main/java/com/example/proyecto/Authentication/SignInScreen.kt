@@ -22,6 +22,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -41,12 +42,23 @@ import androidx.navigation.NavController
 import com.example.proyecto.navigation.AppScreens
 import androidx.compose.material3.Text as Text
 import com.example.proyecto.R
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
+
+
 @Composable
 fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel = androidx.lifecycle.viewmodel.compose.viewModel()) {
+    val showSnackbar = remember { mutableStateOf(false) }
+    val snackbarMessage = remember { mutableStateOf("") }
+
+    val authResult by viewModel.authResult.observeAsState()
+
+
     //True = Login; False = Create
     val showLoginForm = rememberSaveable{
         mutableStateOf(true)
     }
+
     Surface(modifier = Modifier
         .fillMaxSize()
     ) {
@@ -59,13 +71,35 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                 contentDescription = "Logo de la aplicación",
                 modifier = Modifier.fillMaxWidth().height(200.dp)
             )
+            authResult?.let { result ->
+                if (result is SignInScreenViewModel.AuthResult.Error) {
+                    snackbarMessage.value = (result as SignInScreenViewModel.AuthResult.Error).message
+                    showSnackbar.value = true
+                    viewModel.clearError() // Clear the error state
+                }
+            }
+
+            if (showSnackbar.value) {
+                Snackbar(
+                    action = {
+                        Button(
+                            onClick = { showSnackbar.value = false }
+                        ) {
+                            Text("OK")
+                        }
+                    },
+                    modifier = Modifier.padding(20.dp)
+                ) {
+                    Text(snackbarMessage.value)
+                }
+            }
             if (showLoginForm.value) {
                 Text(text = "Iniciar Sesion")
                 UserForm(
                     isCreateAccount = false
                 ){
                     email,password ->
-                    Log.d("BREAK","Logueando con $email y $password")
+                    //Log.d("BREAK","Logueando con $email y $password")
                     viewModel.signInWithEmailAndPassword(email, password){
                         navController.navigate(AppScreens.MainFeedScreen.route)
                     }
@@ -78,11 +112,12 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                 )
                 {
                         email, password ->
-                        Log.d("BREAK","Creando cuenta con $email y $password")
+                        //Log.d("BREAK","Creando cuenta con $email y $password")
                         viewModel.createUserWithEmailAndPassword(email, password){
                             navController.navigate(AppScreens.MainFeedScreen.route)
                         }
                 }
+
             }
             Spacer(modifier = Modifier.height(15.dp))
             Row (horizontalArrangement = Arrangement.Center,
