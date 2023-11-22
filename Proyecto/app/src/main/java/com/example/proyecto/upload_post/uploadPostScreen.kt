@@ -9,7 +9,6 @@ import android.provider.MediaStore
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.launch
 import androidx.compose.foundation.Image
@@ -44,7 +43,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.modifier.modifierLocalMapOf
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -56,7 +54,6 @@ import androidx.navigation.compose.rememberNavController
 import com.example.proyecto.R
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.google.firebase.storage.storage
 import java.io.ByteArrayOutputStream
 
 @Composable
@@ -67,6 +64,7 @@ fun uploadPostScreen(navController: NavController){
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
             modifier = Modifier.fillMaxWidth()
+                .fillMaxSize()
         )
         val isUploading = remember {
             mutableStateOf(false)
@@ -111,7 +109,7 @@ fun uploadPostScreen(navController: NavController){
                 modifier = Modifier
                     .clip(CircleShape)
                     .size(250.dp)
-                    .background(Color.Blue)
+                    .background(Color.White)
                     .border(
                         width = 1.dp,
                         color = Color.White,
@@ -131,7 +129,7 @@ fun uploadPostScreen(navController: NavController){
                 contentDescription = null,
                 modifier = Modifier
                     .clip(CircleShape)
-                    .background(Color.Black)
+                    .background(Color.White)
                     .size(50.dp)
                     .padding(10.dp)
                     .clickable { showDialog = true }
