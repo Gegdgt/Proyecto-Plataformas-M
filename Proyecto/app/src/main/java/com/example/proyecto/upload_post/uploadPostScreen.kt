@@ -49,15 +49,24 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.example.proyecto.Authentication.SignInScreenViewModel
 import com.example.proyecto.R
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
+import java.util.UUID
 
 @Composable
-fun uploadPostScreen(navController: NavController){
+fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreenViewModel){
+    // Obtener el ViewModel
+    val viewModel: SignInScreenViewModel = viewModel()
+
+    // Obtener el userId del ViewModel
+    val userId = signInViewModel.getCurrentUserId() ?: ""
     Box{
         Image(
             painter = painterResource(id = R.drawable.imagenfondo),
@@ -143,7 +152,7 @@ fun uploadPostScreen(navController: NavController){
             Button(onClick = {
                 isUploading.value = true
                 bitmap.value.let{bitmap ->
-                    uploadImageToFirebase(bitmap, context as ComponentActivity){success ->
+                    uploadImageToFirebase(bitmap, context as ComponentActivity, userId){success ->
                         isUploading.value = false
                         if(success){
                             Toast.makeText(context, "Subida exitosa", Toast.LENGTH_SHORT).show()
@@ -234,22 +243,66 @@ fun uploadPostScreen(navController: NavController){
     }
 
 
-fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, callback: (Boolean) -> Unit) {
+fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: String,callback: (Boolean) -> Unit) {
     val storageRef = Firebase.storage.reference
-    val imageRef = storageRef.child("images/${bitmap}")
+    val userImagesRef =
+        storageRef.child("images/$userId/") // Aquí se utiliza el userId para crear la ruta
+
+    val imageName = "${UUID.randomUUID()}.jpg" // Nombre único para la imagen
+
+    val imageRef = userImagesRef.child(imageName)
 
     val baos = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val imageData = baos.toByteArray()
+// Subir la imagen a Firebase Storage
+    imageRef.putBytes(imageData)
+        .addOnSuccessListener { _ ->
+            imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
+                val imageUrl = downloadUrl.toString()
 
-    imageRef.putBytes(imageData).addOnSuccessListener{
-        callback(true)
-    }.addOnFailureListener{
-        callback(false)
-    }}
-
-@Preview
-@Composable
-fun previewUploadImages(){
-    uploadPostScreen(rememberNavController())
+                // Guardar la información de la imagen en Firestore
+                saveImageInfoToFirestore(userId, imageName, imageUrl) { success ->
+                    if (success) {
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
+            }.addOnFailureListener {
+                callback(false)
+            }
+        }
+        .addOnFailureListener {
+            callback(false)
+        }
 }
+
+private fun saveImageInfoToFirestore(userId: String, imageName: String, imageUrl: String, callback: (Boolean) -> Unit) {
+    // Aquí puedes guardar la información de la imagen en Firestore
+    val firestore = Firebase.firestore
+
+    // Referencia a la colección "images"
+    val imagesCollectionRef = firestore.collection("images")
+
+    // Crear un documento con información de la imagen
+    val imageInfo = hashMapOf(
+        "userId" to userId,
+        "imageName" to imageName,
+        "imageUrl" to imageUrl
+        // Agregar otros campos relacionados con la imagen si es necesario
+    )
+
+    // Agregar el documento a la colección "images"
+    imagesCollectionRef.add(imageInfo)
+        .addOnSuccessListener {
+            // La información de la imagen se guardó correctamente en Firestore
+            callback(true)
+        }
+        .addOnFailureListener {
+            // Manejar el error al guardar la información de la imagen en Firestore
+            callback(false)
+        }
+}
+
+

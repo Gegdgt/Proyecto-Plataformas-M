@@ -84,4 +84,8 @@ class SignInScreenViewModel: ViewModel() {
             }
     }
 
+    fun getCurrentUserId(): String? {
+        return Firebase.auth.currentUser?.uid
+    }
+
 }

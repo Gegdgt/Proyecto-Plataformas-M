@@ -1,11 +1,13 @@
 package com.example.proyecto.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.proyecto.Authentication.BreakSplashScreen
 import com.example.proyecto.Authentication.SignInScreen
+import com.example.proyecto.Authentication.SignInScreenViewModel
 import com.example.proyecto.Visit_Profile.VisitProfile
 import com.example.proyecto.main_feed_screen.MainFeedScreen
 import com.example.proyecto.profile_perfil.ProfileScreen
@@ -35,7 +37,8 @@ fun AppNavigation(){
             SearchScreen(navController)
         }
         composable(route = AppScreens.UploadPostScreen.route){
-            uploadPostScreen(navController)
+            val signInViewModel: SignInScreenViewModel = viewModel()
+            uploadPostScreen(navController,signInViewModel)
         }
     }
 
