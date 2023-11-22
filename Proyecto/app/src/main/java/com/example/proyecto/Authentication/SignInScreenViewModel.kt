@@ -30,6 +30,7 @@ class SignInScreenViewModel: ViewModel() {
         }
         catch (ex:Exception){
             Log.d("BREAK", "signInWithEmailAndPassword: ${ex.message}")
+
         }
     }
 
