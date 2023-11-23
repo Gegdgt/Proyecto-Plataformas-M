@@ -31,7 +31,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -60,8 +62,9 @@ import com.google.firebase.storage.ktx.storage
 import java.io.ByteArrayOutputStream
 import java.util.UUID
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreenViewModel){
+fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreenViewModel) {
     // Obtener el ViewModel
     val viewModel: SignInScreenViewModel = viewModel()
 
@@ -69,12 +72,13 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
     val userId = signInViewModel.getCurrentUserId() ?: ""
     val displayName = signInViewModel.getCurrentDisplayname() ?: ""
 
-    Box{
+    Box {
         Image(
             painter = painterResource(id = R.drawable.imagenfondo),
             contentDescription = null,
             contentScale = ContentScale.FillBounds,
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
                 .fillMaxSize()
         )
         val isUploading = remember {
@@ -83,11 +87,12 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
         val context = LocalContext.current
         val img: Bitmap = BitmapFactory.decodeResource(Resources.getSystem(), android.R.drawable.ic_menu_report_image)
         val bitmap = remember { mutableStateOf(img) }
+        var commentText by remember { mutableStateOf("") }
 
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.TakePicturePreview()
-        ){
-            if (it != null){
+        ) {
+            if (it != null) {
                 bitmap.value = it
             }
         }
@@ -95,10 +100,9 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
         val launchImage = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.GetContent()
         ) {
-            if (Build.VERSION.SDK_INT < 28){
+            if (Build.VERSION.SDK_INT < 28) {
                 bitmap.value = MediaStore.Images.Media.getBitmap(context.contentResolver, it)
-            }
-            else{
+            } else {
                 val source = it?.let { it1 ->
                     ImageDecoder.createSource(context.contentResolver, it1)
                 }
@@ -112,9 +116,10 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp)
-        ){
-            Image(bitmap = bitmap.value.asImageBitmap(),
+                .padding(top = 100.dp, bottom = 16.dp) // Modificado para dejar espacio en la parte inferior
+        ) {
+            Image(
+                bitmap = bitmap.value.asImageBitmap(),
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
@@ -127,14 +132,26 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
                         shape = CircleShape
                     )
             )
+            Spacer(modifier = Modifier.padding(10.dp))
+            TextField(
+                value = commentText,
+                onValueChange = { commentText = it },
+                label = { Text("Descripción...") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(180.dp)
+            )
+            Spacer(modifier = Modifier.padding(30.dp))
         }
+
         var showDialog by remember {
             mutableStateOf(false)
         }
         Box(
             modifier = Modifier
                 .padding(top = 280.dp, start = 260.dp)
-        ){
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
                 contentDescription = null,
@@ -144,52 +161,26 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
                     .size(50.dp)
                     .padding(10.dp)
                     .clickable { showDialog = true }
-                )
+            )
         }
-        Column(horizontalAlignment = Alignment.CenterHorizontally,
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
             modifier = Modifier
                 .fillMaxSize()
-                .padding(top = 100.dp)){
-            Button(onClick = {
-                isUploading.value = true
-                bitmap.value.let{bitmap ->
-                    uploadImageToFirebase(bitmap, context as ComponentActivity, userId,displayName){success ->
-                        isUploading.value = false
-                        if(success){
-                            Toast.makeText(context, "Subida exitosa", Toast.LENGTH_SHORT).show()
-                        }
-                        else {
-                            Toast.makeText(context, "Error al subir", Toast.LENGTH_SHORT).show()
-                        }
-                    }
-                }
-            },
-                colors = ButtonDefaults.buttonColors(
-                    Color.Gray
-                )
-            ) {
-                Text(text = "Subir imagen",
-                    fontSize = 30.sp,
-                    fontWeight = FontWeight.Bold
-                    )
-            }
-        }
-        
-        Column(verticalArrangement = Arrangement.Bottom,
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(bottom = 10.dp)) {
-            if (showDialog){
-                Row(verticalAlignment = Alignment.CenterVertically,
+                .padding(bottom = 10.dp)
+        ) {
+            if (showDialog) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .width(300.dp)
                         .height(100.dp)
                         .clip(RoundedCornerShape(10.dp))
-                        .background(Color.Gray)) {
-                    Column(modifier = Modifier.padding(start = 60.dp)){
+                        .background(Color.Gray)
+                ) {
+                    Column(modifier = Modifier.padding(start = 60.dp)) {
                         Image(
                             painter = painterResource(id = R.drawable.baseline_add_a_photo_24),
                             contentDescription = null,
@@ -200,7 +191,7 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
                                     showDialog = false
                                 }
                         )
-                        Text(text = "Camara",color = Color.White)
+                        Text(text = "Camara", color = Color.White)
                     }
                     Spacer(modifier = Modifier.padding(30.dp))
                     Column {
@@ -214,38 +205,82 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
                                     showDialog = false
                                 }
                         )
-                        Text(text = "Galeria",
-                            color= Color.White)
+                        Text(text = "Galeria", color = Color.White)
                     }
-                    Column(modifier=Modifier
-                        .padding(start=80.dp, bottom = 80.dp)) {
-                        Text(text = "X",
-                            color = Color.White,
-                            modifier =Modifier.clickable {showDialog = false})
+                    Column(
+                        modifier = Modifier
+                            .padding(start = 80.dp, bottom = 80.dp)
+                    ) {
+                        Text(text = "X", color = Color.White, modifier = Modifier.clickable { showDialog = false })
                     }
-
-                    }
-                Column(horizontalAlignment = Alignment.CenterHorizontally,
+                }
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Center,
                     modifier = Modifier
                         .height(450.dp)
-                        .fillMaxWidth()) {
-                    if(isUploading.value){
+                        .fillMaxWidth()
+                ) {
+                    if (isUploading.value) {
                         CircularProgressIndicator(
                             modifier = Modifier
                                 .padding(16.dp),
                             color = Color.White
                         )
                     }
-
-                }
                 }
             }
         }
+
+        Column(
+            verticalArrangement = Arrangement.Bottom,
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(bottom = 10.dp)
+        ) {
+            Button(
+                onClick = {
+                    isUploading.value = true
+                    bitmap.value.let { bitmap ->
+                        uploadImageToFirebase(
+                            bitmap,
+                            context as ComponentActivity,
+                            userId,
+                            displayName,
+                            commentText
+                        ) { success ->
+                            isUploading.value = false
+                            if (success) {
+                                Toast.makeText(context, "Subida exitosa", Toast.LENGTH_SHORT).show()
+                            } else {
+                                Toast.makeText(context, "Error al subir", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    Color.Gray
+                )
+            ) {
+                Text(
+                    text = "Añadir al perfil",
+                    fontSize = 30.sp,
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
     }
+}
 
-
-fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: String,displayName: String,callback: (Boolean) -> Unit) {
+fun uploadImageToFirebase(
+    bitmap: Bitmap,
+    context: ComponentActivity,
+    userId: String,
+    displayName: String,
+    commentText: String,
+    callback: (Boolean) -> Unit
+) {
     val storageRef = Firebase.storage.reference
     val userImagesRef =
         storageRef.child("images/$userId/") // Aquí se utiliza el userId para crear la ruta
@@ -257,14 +292,14 @@ fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: St
     val baos = ByteArrayOutputStream()
     bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
     val imageData = baos.toByteArray()
-// Subir la imagen a Firebase Storage
+    // Subir la imagen a Firebase Storage
     imageRef.putBytes(imageData)
         .addOnSuccessListener { _ ->
             imageRef.downloadUrl.addOnSuccessListener { downloadUrl ->
                 val imageUrl = downloadUrl.toString()
 
                 // Guardar la información de la imagen en Firestore
-                saveImageInfoToFirestore(userId, imageName, imageUrl, displayName ) { success ->
+                saveImageInfoToFirestore(userId, imageName, imageUrl, displayName, commentText ) { success ->
                     if (success) {
                         callback(true)
                     } else {
@@ -280,7 +315,13 @@ fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: St
         }
 }
 
-private fun saveImageInfoToFirestore(userId: String, imageName: String, imageUrl: String,displayName: String, callback: (Boolean) -> Unit) {
+private fun saveImageInfoToFirestore(
+    userId: String,
+    imageName: String,
+    imageUrl: String,
+    displayName: String,
+    commentText: String,
+    callback: (Boolean) -> Unit) {
     // Aquí puedes guardar la información de la imagen en Firestore
     val firestore = Firebase.firestore
 
@@ -289,12 +330,14 @@ private fun saveImageInfoToFirestore(userId: String, imageName: String, imageUrl
 
     // Crear un documento con información de la imagen
     val imageInfo = hashMapOf(
-
         "userId" to userId,
         "imageName" to imageName,
         "imageUrl" to imageUrl,
+        "commentText" to commentText
         // Agregar otros campos relacionados con la imagen si es necesario
     )
+
+    imageInfo["comment"] = commentText
 
     // Agregar el documento a la colección "images"
     imagesCollectionRef.add(imageInfo)
@@ -308,4 +351,8 @@ private fun saveImageInfoToFirestore(userId: String, imageName: String, imageUrl
         }
 }
 
-
+@Preview
+@Composable
+fun uploadPostScreenPreview(){
+    uploadPostScreen(rememberNavController(), viewModel())
+}

@@ -38,7 +38,7 @@ fun BreakSplashScreen(navController: NavController){
                         .getInterpolation(it)
                 }),
         )
-        delay(3500L)
+        delay(2500L)
         //navController.navigate(AppScreens.SignInScreen.route)
         if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
             navController.navigate(AppScreens.SignInScreen.route)
