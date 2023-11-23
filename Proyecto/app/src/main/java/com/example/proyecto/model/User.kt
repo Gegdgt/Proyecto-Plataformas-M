@@ -10,4 +10,5 @@ data class User(
     val caption: String,
     val likeCount: Int,
     val commentCount: Int
-)
+) {
+}
