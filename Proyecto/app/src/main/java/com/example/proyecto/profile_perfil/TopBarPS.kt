@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.PowerSettingsNew
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -35,7 +35,7 @@ fun TopBarPS(
         Box {
             Row{
                 IconButton(onClick = { optionClick }) {
-                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Opciones")
+                    Icon(imageVector = Icons.Default.PowerSettingsNew, contentDescription = "Cerrar sesion")
 
                 }
             }

@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -39,7 +39,7 @@ fun TopBarVS(
         Box {
             Row{
                 IconButton(onClick = { optionClick }) {
-                    Icon(imageVector = Icons.Default.MoreVert, contentDescription = "Opciones")
+                    Icon(imageVector = Icons.Default.Info, contentDescription = "Info")
                 }
             }
         }
