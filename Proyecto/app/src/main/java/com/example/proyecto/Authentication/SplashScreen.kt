@@ -38,16 +38,16 @@ fun BreakSplashScreen(navController: NavController){
                         .getInterpolation(it)
                 }),
         )
-        delay(2500L)
+        delay(1500L)
         //navController.navigate(AppScreens.SignInScreen.route)
         if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
             navController.navigate(AppScreens.SignInScreen.route)
         }
         else{
             navController.navigate(AppScreens.MainFeedScreen.route){
-            popUpTo(AppScreens.SplashScreen.route){
-                inclusive=true
-            }
+                popUpTo(AppScreens.SplashScreen.route){
+                    inclusive=true
+                }
             }
         }
     }
