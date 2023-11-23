@@ -88,6 +88,8 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
         val img: Bitmap = BitmapFactory.decodeResource(Resources.getSystem(), android.R.drawable.ic_menu_report_image)
         val bitmap = remember { mutableStateOf(img) }
         var commentText by remember { mutableStateOf("") }
+        var ubicationText by remember { mutableStateOf("") }
+        var likes by remember { mutableStateOf(0) }
 
         val launcher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.TakePicturePreview()
@@ -123,13 +125,13 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
-                    .clip(CircleShape)
+                    .clip(RoundedCornerShape(16.dp)) // Puedes ajustar el radio según tus preferencias
                     .size(250.dp)
                     .background(Color.White)
                     .border(
                         width = 1.dp,
                         color = Color.White,
-                        shape = CircleShape
+                        shape = RoundedCornerShape(16.dp)
                     )
             )
             Spacer(modifier = Modifier.padding(10.dp))
@@ -140,7 +142,17 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(16.dp)
-                    .height(180.dp)
+                    .height(150.dp)
+            )
+            Spacer(modifier = Modifier.padding(5.dp))
+            TextField(
+                value = ubicationText,
+                onValueChange = { ubicationText = it },
+                label = { Text("Ubicación...") },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.dp)
+                    .height(60.dp)
             )
             Spacer(modifier = Modifier.padding(30.dp))
         }
@@ -248,7 +260,9 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
                             context as ComponentActivity,
                             userId,
                             displayName,
-                            commentText
+                            commentText,
+                            ubicationText,
+                            likes
                         ) { success ->
                             isUploading.value = false
                             if (success) {
@@ -279,6 +293,8 @@ fun uploadImageToFirebase(
     userId: String,
     displayName: String,
     commentText: String,
+    ubicationText: String,
+    likes: Int,
     callback: (Boolean) -> Unit
 ) {
     val storageRef = Firebase.storage.reference
@@ -299,7 +315,15 @@ fun uploadImageToFirebase(
                 val imageUrl = downloadUrl.toString()
 
                 // Guardar la información de la imagen en Firestore
-                saveImageInfoToFirestore(userId, imageName, imageUrl, displayName, commentText ) { success ->
+                saveImageInfoToFirestore(
+                    userId,
+                    imageName,
+                    imageUrl,
+                    displayName,
+                    commentText,
+                    ubicationText,
+                    likes
+                ) { success ->
                     if (success) {
                         callback(true)
                     } else {
@@ -321,7 +345,10 @@ private fun saveImageInfoToFirestore(
     imageUrl: String,
     displayName: String,
     commentText: String,
-    callback: (Boolean) -> Unit) {
+    ubicationText: String,
+    likes: Int,
+    callback: (Boolean) -> Unit
+) {
     // Aquí puedes guardar la información de la imagen en Firestore
     val firestore = Firebase.firestore
 
@@ -330,14 +357,15 @@ private fun saveImageInfoToFirestore(
 
     // Crear un documento con información de la imagen
     val imageInfo = hashMapOf(
-        "userId" to userId,
+        "user_Id" to userId,
         "imageName" to imageName,
         "imageUrl" to imageUrl,
-        "commentText" to commentText
+        "description" to commentText,
+        "location" to ubicationText,
+        "likes" to likes
+
         // Agregar otros campos relacionados con la imagen si es necesario
     )
-
-    imageInfo["comment"] = commentText
 
     // Agregar el documento a la colección "images"
     imagesCollectionRef.add(imageInfo)
