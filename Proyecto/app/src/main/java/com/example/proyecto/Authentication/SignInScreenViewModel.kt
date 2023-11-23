@@ -92,4 +92,5 @@ class SignInScreenViewModel: ViewModel() {
         return Firebase.auth.currentUser?.displayName
     }
 
+
 }

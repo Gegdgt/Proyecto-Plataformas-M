@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.proyecto.R
 import com.example.proyecto.navigation.AppScreens
+import com.google.firebase.auth.FirebaseAuth
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +41,14 @@ fun TopBar(navController: NavController) {
                     modifier = Modifier.size(25.dp)
                 )
             }
-            IconButton(onClick = { navController.navigate(route = AppScreens.SignInScreen.route) }) {
+            IconButton(onClick = { navController.navigate(route = AppScreens.SignInScreen.route){
+                popUpTo(AppScreens.MainFeedScreen.route){
+                    inclusive=true
+
+                }
+            }
+            }) {
+
                 Icon(
                     painter = painterResource(id = R.drawable.poder) ,
                     contentDescription = "Desloguearse",
