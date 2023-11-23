@@ -21,6 +21,8 @@ import androidx.navigation.NavController
 import com.example.proyecto.R
 import com.example.proyecto.navigation.AppScreens
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.delay
 
 
@@ -46,6 +48,7 @@ fun BreakSplashScreen(navController: NavController){
         else{
             navController.navigate(AppScreens.MainFeedScreen.route){
                 popUpTo(AppScreens.SplashScreen.route){
+                    Firebase.auth.signOut()
                     inclusive=true
                 }
             }

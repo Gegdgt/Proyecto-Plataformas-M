@@ -16,10 +16,12 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.proyecto.R
 import com.example.proyecto.model.User
+import com.example.proyecto.navigation.AppScreens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainFeedScreen(navController: NavController) {
+
     val users = listOf(
         User(
             profilePic = painterResource(R.drawable.profile_pic),
