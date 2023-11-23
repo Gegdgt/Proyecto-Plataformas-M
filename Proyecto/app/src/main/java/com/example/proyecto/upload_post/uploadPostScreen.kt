@@ -67,6 +67,8 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
 
     // Obtener el userId del ViewModel
     val userId = signInViewModel.getCurrentUserId() ?: ""
+    val displayName = signInViewModel.getCurrentDisplayname() ?: ""
+
     Box{
         Image(
             painter = painterResource(id = R.drawable.imagenfondo),
@@ -152,7 +154,7 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
             Button(onClick = {
                 isUploading.value = true
                 bitmap.value.let{bitmap ->
-                    uploadImageToFirebase(bitmap, context as ComponentActivity, userId){success ->
+                    uploadImageToFirebase(bitmap, context as ComponentActivity, userId,displayName){success ->
                         isUploading.value = false
                         if(success){
                             Toast.makeText(context, "Subida exitosa", Toast.LENGTH_SHORT).show()
@@ -243,7 +245,7 @@ fun uploadPostScreen(navController: NavController, signInViewModel: SignInScreen
     }
 
 
-fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: String,callback: (Boolean) -> Unit) {
+fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: String,displayName: String,callback: (Boolean) -> Unit) {
     val storageRef = Firebase.storage.reference
     val userImagesRef =
         storageRef.child("images/$userId/") // Aquí se utiliza el userId para crear la ruta
@@ -262,7 +264,7 @@ fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: St
                 val imageUrl = downloadUrl.toString()
 
                 // Guardar la información de la imagen en Firestore
-                saveImageInfoToFirestore(userId, imageName, imageUrl) { success ->
+                saveImageInfoToFirestore(userId, imageName, imageUrl, displayName ) { success ->
                     if (success) {
                         callback(true)
                     } else {
@@ -278,7 +280,7 @@ fun uploadImageToFirebase(bitmap: Bitmap, context: ComponentActivity, userId: St
         }
 }
 
-private fun saveImageInfoToFirestore(userId: String, imageName: String, imageUrl: String, callback: (Boolean) -> Unit) {
+private fun saveImageInfoToFirestore(userId: String, imageName: String, imageUrl: String,displayName: String, callback: (Boolean) -> Unit) {
     // Aquí puedes guardar la información de la imagen en Firestore
     val firestore = Firebase.firestore
 
@@ -287,9 +289,10 @@ private fun saveImageInfoToFirestore(userId: String, imageName: String, imageUrl
 
     // Crear un documento con información de la imagen
     val imageInfo = hashMapOf(
+
         "userId" to userId,
         "imageName" to imageName,
-        "imageUrl" to imageUrl
+        "imageUrl" to imageUrl,
         // Agregar otros campos relacionados con la imagen si es necesario
     )
 
