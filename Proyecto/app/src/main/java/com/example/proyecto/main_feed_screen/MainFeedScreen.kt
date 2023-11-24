@@ -30,6 +30,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import coil.compose.rememberImagePainter
 import coil.request.ImageRequest
 import com.example.proyecto.model.Posts
 import com.google.firebase.firestore.ktx.firestore
@@ -47,15 +48,12 @@ fun MainFeedScreen(navController: NavController) {
 
     // Función para cargar la imagen utilizando Coil de manera asíncrona
     @Composable
-    fun LoadImageFromStorage(imageUrl: String) {
-        val imageReference = Firebase.storage.getReferenceFromUrl(imageUrl).toString()
-
+    fun LoadImageFromStorage(imageUrl: String, isLoading: Boolean) {
         // Muestra un contenedor con una imagen de carga mientras se carga la imagen principal
         Box(
             modifier = Modifier.fillMaxWidth().height(200.dp)
         ) {
             // Imagen de carga (placeholder)
-            var isLoading by remember { mutableStateOf(true) }
             if (isLoading) {
                 CircularProgressIndicator(
                     modifier = Modifier
@@ -66,9 +64,12 @@ fun MainFeedScreen(navController: NavController) {
 
             // Imagen principal cargada con Coil
             val painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current).data(data = imageReference).apply(block = fun ImageRequest.Builder.() {
-                    crossfade(true)
-                }).build()
+                ImageRequest.Builder(LocalContext.current)
+                    .data(imageUrl) // Utilizamos directamente la URL de la imagen
+                    .apply {
+                        crossfade(true)
+                    }
+                    .build()
             )
 
             Image(
@@ -83,7 +84,7 @@ fun MainFeedScreen(navController: NavController) {
                 // Se ejecutará cuando la imagen se haya cargado
                 onDispose {
                     // Cambia el estado cuando la imagen se ha cargado
-                    isLoading = false
+                    // Podrías manejar el estado de carga aquí si es necesario
                 }
             }
         }
@@ -122,13 +123,13 @@ fun MainFeedScreen(navController: NavController) {
             item { Divider() }
             items(posts) { post ->
                 // Utiliza Coil para cargar la imagen desde Firebase Storage de manera asíncrona
-                LoadImageFromStorage(post.imageUrl)
-
+                LoadImageFromStorage(post.imageUrl, isLoading = false)
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }
     }
 }
+
 
 
 
