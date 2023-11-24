@@ -1,6 +1,7 @@
 package com.example.proyecto.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,10 +17,13 @@ import com.example.proyecto.upload_post.uploadPostScreen
 
 @Composable
 fun AppNavigation(){
+
+
     val navController = rememberNavController()
     NavHost(navController = navController , startDestination = AppScreens.SplashScreen.route ){
         composable(route = AppScreens.SplashScreen.route){
-            BreakSplashScreen(navController)
+            BreakSplashScreen(navController = navController, coroutineScope = rememberCoroutineScope())
+
         }
         composable(route = AppScreens.SignInScreen.route){
             SignInScreen(navController)

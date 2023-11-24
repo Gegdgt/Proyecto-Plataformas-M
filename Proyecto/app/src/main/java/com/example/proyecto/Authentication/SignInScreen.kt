@@ -44,6 +44,8 @@ import androidx.compose.material3.Text as Text
 import com.example.proyecto.R
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.rememberCoroutineScope
+import kotlinx.coroutines.launch
 
 
 @Composable
@@ -53,19 +55,21 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
 
     val authResult by viewModel.authResult.observeAsState()
 
-
-    //True = Login; False = Create
-    val showLoginForm = rememberSaveable{
+    // True = Login; False = Create
+    val showLoginForm = rememberSaveable {
         mutableStateOf(true)
     }
+
+    // Coroutine scope para manejar operaciones asíncronas
+    val coroutineScope = rememberCoroutineScope()
 
     Surface(modifier = Modifier
         .fillMaxSize()
     ) {
-        Column (
+        Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center
-        ){
+        ) {
             Image(
                 painter = painterResource(id = R.drawable.break_1),
                 contentDescription = "Logo de la aplicación",
@@ -97,31 +101,32 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                 Text(text = "Iniciar Sesion")
                 UserForm(
                     isCreateAccount = false
-                ){
-                    email,password ->
-                    //Log.d("BREAK","Logueando con $email y $password")
-                    viewModel.signInWithEmailAndPassword(email, password){
-                        navController.navigate(AppScreens.MainFeedScreen.route)
+                ) { email, password ->
+                    // Log.d("BREAK","Logueando con $email y $password")
+                    coroutineScope.launch {
+                        viewModel.signInWithEmailAndPassword(email, password) {
+                            navController.navigate(AppScreens.MainFeedScreen.route)
+                        }
                     }
                 }
-            }
-            else{
+            } else {
                 Text(text = "Crea una cuenta")
                 UserForm(
                     isCreateAccount = true
-                )
-                {
-                        email, password ->
-                        //Log.d("BREAK","Creando cuenta con $email y $password")
-                        viewModel.createUserWithEmailAndPassword(email, password){
+                ) { email, password ->
+                    // Log.d("BREAK","Creando cuenta con $email y $password")
+                    coroutineScope.launch {
+                        viewModel.createUserWithEmailAndPassword(email, password) {
                             navController.navigate(AppScreens.MainFeedScreen.route)
                         }
+                    }
                 }
-
             }
             Spacer(modifier = Modifier.height(15.dp))
-            Row (horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically ){
+            Row(
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 val text1 =
                     if (showLoginForm.value) "¿No tienes cuenta?"
                     else "¿Ya tienes cuenta?"
@@ -129,11 +134,13 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
                     if (showLoginForm.value) "Registrate"
                     else "Inicia sesion"
                 Text(text = text1)
-                Text(text = text2,
+                Text(
+                    text = text2,
                     modifier = Modifier
                         .clickable { showLoginForm.value = !showLoginForm.value }
                         .padding(start = 5.dp),
-                    color = MaterialTheme.colorScheme.secondary)
+                    color = MaterialTheme.colorScheme.secondary
+                )
             }
         }
     }
@@ -143,7 +150,7 @@ fun SignInScreen(navController: NavController, viewModel: SignInScreenViewModel 
 @Composable
 fun UserForm(
     isCreateAccount: Boolean = false,
-    onDone: (String, String) -> Unit = {email,pwd->}
+    onDone: (String, String) -> Unit = { email, pwd -> }
 ) {
     val email = rememberSaveable {
         mutableStateOf("")
@@ -154,12 +161,12 @@ fun UserForm(
     val passwordVisible = rememberSaveable {
         mutableStateOf(false)
     }
-    val valido = remember(email.value, password.value){
+    val valido = remember(email.value, password.value) {
         email.value.trim().isNotEmpty() &&
                 password.value.trim().isNotEmpty()
     }
     val keyboardController = LocalSoftwareKeyboardController.current
-    Column (horizontalAlignment = Alignment.CenterHorizontally){
+    Column(horizontalAlignment = Alignment.CenterHorizontally) {
         EmailInput(
             emailState = email
         )
@@ -171,7 +178,7 @@ fun UserForm(
         SumbitButton(
             textId = if (isCreateAccount) "Crear cuenta" else "Login",
             inputValido = valido
-        ){
+        ) {
             onDone(email.value.trim(), password.value.trim())
             keyboardController?.hide()
         }
@@ -182,20 +189,20 @@ fun UserForm(
 fun SumbitButton(
     textId: String,
     inputValido: Boolean,
-    onClic: ()->Unit
+    onClic: () -> Unit
 ) {
-    Button(onClick = onClic,
+    Button(
+        onClick = onClic,
         modifier = Modifier
             .padding(3.dp)
             .fillMaxWidth(),
         shape = CircleShape,
         enabled = inputValido
-        ){
-        Text(text = textId,
-            modifier = Modifier
-                .padding(5.dp))
+    ) {
+        Text(text = textId, modifier = Modifier.padding(5.dp))
     }
 }
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PasswordInput(
@@ -208,8 +215,8 @@ fun PasswordInput(
     else PasswordVisualTransformation()
     OutlinedTextField(
         value = passwordState.value,
-        onValueChange = {passwordState.value = it},
-        label = { Text(text = labelId)},
+        onValueChange = { passwordState.value = it },
+        label = { Text(text = labelId) },
         singleLine = true,
         keyboardOptions = KeyboardOptions(
             keyboardType = KeyboardType.Password
@@ -219,13 +226,13 @@ fun PasswordInput(
             .fillMaxWidth(),
         visualTransformation = visualTransformation,
         trailingIcon = {
-            if (passwordState.value.isNotBlank()){
+            if (passwordState.value.isNotBlank()) {
                 PasswordVisibleIcon(passwordVisible)
-            }
-            else null
+            } else null
         }
     )
 }
+
 @Composable
 fun PasswordVisibleIcon(
     passwordVisible: MutableState<Boolean>
@@ -237,13 +244,15 @@ fun PasswordVisibleIcon(
             Icons.Default.Visibility
     IconButton(onClick = {
         passwordVisible.value = !passwordVisible.value
-    }){
+    }) {
         Icon(
             imageVector = image,
-            contentDescription = "")
+            contentDescription = ""
+        )
     }
 
 }
+
 @Composable
 fun EmailInput(
     emailState: MutableState<String>,
@@ -277,4 +286,3 @@ fun InputField(
         )
     )
 }
-
