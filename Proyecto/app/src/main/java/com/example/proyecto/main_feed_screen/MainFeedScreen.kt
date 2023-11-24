@@ -46,50 +46,6 @@ fun MainFeedScreen(navController: NavController) {
     // Instancia de Firestore
     val db = Firebase.firestore
 
-    // Función para cargar la imagen utilizando Coil de manera asíncrona
-    @Composable
-    fun LoadImageFromStorage(imageUrl: String, isLoading: Boolean) {
-        // Muestra un contenedor con una imagen de carga mientras se carga la imagen principal
-        Box(
-            modifier = Modifier.fillMaxWidth().height(200.dp)
-        ) {
-            // Imagen de carga (placeholder)
-            if (isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier
-                        .size(48.dp)
-                        .align(Alignment.Center)
-                )
-            }
-
-            // Imagen principal cargada con Coil
-            val painter = rememberAsyncImagePainter(
-                ImageRequest.Builder(LocalContext.current)
-                    .data(imageUrl) // Utilizamos directamente la URL de la imagen
-                    .apply {
-                        crossfade(true)
-                    }
-                    .build()
-            )
-
-            Image(
-                painter = painter,
-                contentDescription = null,
-                modifier = Modifier.fillMaxSize(),
-                contentScale = ContentScale.Crop // Ajusta según tus necesidades
-            )
-
-            // Observa el ciclo de vida para detectar cuándo la imagen se ha cargado
-            DisposableEffect(painter) {
-                // Se ejecutará cuando la imagen se haya cargado
-                onDispose {
-                    // Cambia el estado cuando la imagen se ha cargado
-                    // Podrías manejar el estado de carga aquí si es necesario
-                }
-            }
-        }
-    }
-
     // Consulta la colección "posts" en Firestore
     LaunchedEffect(Unit) {
         db.collection("posts")
@@ -123,12 +79,54 @@ fun MainFeedScreen(navController: NavController) {
             item { Divider() }
             items(posts) { post ->
                 // Utiliza Coil para cargar la imagen desde Firebase Storage de manera asíncrona
-                LoadImageFromStorage(post.imageUrl, isLoading = false)
+                LoadImageFromStorage(post.imageUrl)
                 Spacer(modifier = Modifier.height(15.dp))
             }
         }
     }
 }
+
+@Composable
+fun LoadImageFromStorage(imageUrl: String) {
+    // Muestra un contenedor con una imagen de carga mientras se carga la imagen principal
+    Box(
+        modifier = Modifier.fillMaxWidth().height(200.dp)
+    ) {
+        // Imagen de carga (placeholder)
+        CircularProgressIndicator(
+            modifier = Modifier
+                .size(48.dp)
+                .align(Alignment.Center)
+        )
+
+        // Imagen principal cargada con Coil
+        val painter = rememberAsyncImagePainter(
+            ImageRequest.Builder(LocalContext.current)
+                .data(imageUrl) // Utilizamos directamente la URL de la imagen
+                .apply {
+                    crossfade(true)
+                }
+                .build()
+        )
+
+        Image(
+            painter = painter,
+            contentDescription = null,
+            modifier = Modifier.fillMaxSize(),
+            contentScale = ContentScale.Crop // Ajusta según tus necesidades
+        )
+
+        // Observa el ciclo de vida para detectar cuándo la imagen se ha cargado
+        DisposableEffect(painter) {
+            // Se ejecutará cuando la imagen se haya cargado
+            onDispose {
+                // Cambia el estado cuando la imagen se ha cargado
+                // Podrías manejar el estado de carga aquí si es necesario
+            }
+        }
+    }
+}
+
 
 
 
