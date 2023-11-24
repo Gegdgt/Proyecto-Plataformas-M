@@ -23,44 +23,44 @@ import com.example.proyecto.navigation.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-
+import kotlinx.coroutines.launch
 
 @Composable
-fun BreakSplashScreen(navController: NavController){
-    val scale = remember{
+fun BreakSplashScreen(navController: NavController, coroutineScope: CoroutineScope) {
+    val scale = remember {
         androidx.compose.animation.core.Animatable(0f)
     }
-    LaunchedEffect(key1 = true ){
+    LaunchedEffect(key1 = true) {
         scale.animateTo(
             targetValue = 1.2f,
-            animationSpec = tween(durationMillis = 800,
-                easing = {
-                    OvershootInterpolator(8f)
-                        .getInterpolation(it)
-                }),
+            animationSpec = tween(durationMillis = 800, easing = { OvershootInterpolator(8f).getInterpolation(it) }),
         )
         delay(1500L)
-        //navController.navigate(AppScreens.SignInScreen.route)
-        if(FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()){
-            navController.navigate(AppScreens.SignInScreen.route)
-        }
-        else{
-            navController.navigate(AppScreens.MainFeedScreen.route){
-                popUpTo(AppScreens.SplashScreen.route){
-                    Firebase.auth.signOut()
-                    inclusive=true
+
+        // Utilizamos la coroutineScope proporcionada para manejar la lógica asíncrona
+        coroutineScope.launch {
+            if (FirebaseAuth.getInstance().currentUser?.email.isNullOrEmpty()) {
+                navController.navigate(AppScreens.SignInScreen.route)
+            } else {
+                navController.navigate(AppScreens.MainFeedScreen.route) {
+                    popUpTo(AppScreens.SplashScreen.route) {
+                        Firebase.auth.signOut()
+                        inclusive = true
+                    }
                 }
             }
         }
     }
+
     val imagePainter = painterResource(id = R.drawable.break_open)
 
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .width(IntrinsicSize.Max) // Ocupa todo el ancho disponible
-            .fillMaxHeight() // Tamaño máximo en el eje vertical
+            .width(IntrinsicSize.Max)
+            .fillMaxHeight()
             .graphicsLayer(scaleX = scale.value, scaleY = scale.value)
             .scale(scale.value),
         contentAlignment = Alignment.Center
@@ -71,8 +71,7 @@ fun BreakSplashScreen(navController: NavController){
             modifier = Modifier
                 .fillMaxSize()
                 .scale(scale.value)
-                .align(Alignment.Center) 
+                .align(Alignment.Center)
         )
     }
-
 }
